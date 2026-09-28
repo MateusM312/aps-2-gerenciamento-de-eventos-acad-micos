@@ -1,59 +1,58 @@
 from fastapi import APIRouter, HTTPException, Depends
-from model.participantes_model import Participante 
+from model.participantes_model import Participante
 from repositories.participantes_repository import ParticipantesRepositorio
 from services.participantes_service import ParticipantesService
 
 router = APIRouter(prefix="/participantes", tags=["Participante"])
 
-repository = ParticipantesRepositorio
+repository = ParticipantesRepositorio()
 service = ParticipantesService(repository)
 
 def get_participante_service():
     return service
 
 
-# Cadastrar participante: 
-# POST /participantes 
+# Cadastrar participante:
+# POST /participantes
 
 @router.post("/")
-def cadastrar_participante(dados: Participante):
-    try:
-        ParticipantesRepositorio.salvar(dados)
-    except ValueError as e:
-        HTTPException(404, str(e))
+def cadastrar_participante(dados: Participante, service: ParticipantesService = Depends(get_participante_service)):
+    return service.participante_repository.salvar(dados)
 
-# Listar participantes: 
-# GET /participantes 
+
+# Listar participantes:
+# GET /participantes
+
 @router.get("/")
-def listar_participantes():
-    try:
-        ParticipantesRepositorio.listar_participantes()
-    except ValueError as e:
-        HTTPException(404, str(e))
+def listar_participantes(service: ParticipantesService = Depends(get_participante_service)):
+    return service.participante_repository.listar_participantes()
 
-# Consultar participante: 
-# GET /participantes/{id} 
+
+# Consultar participante:
+# GET /participantes/{id}
+
 @router.get("/{id}")
-def consultar_participante(id:int):
-    try:
-        ParticipantesRepositorio.buscar_por_id(id)
-    except ValueError as e:
-        HTTPException(404, str(e))
+def consultar_participante(id: int, service: ParticipantesService = Depends(get_participante_service)):
+    participante = service.participante_repository.buscar_por_id(id)
+    if participante is None:
+        raise HTTPException(status_code=404, detail="Participante não encontrado")
+    return participante
 
-# Atualizar participante: 
-# PUT /participantes/{id} 
+
+# Atualizar participante:
+# PUT /participantes/{id}
+
 @router.put("/{id}")
-def atualizar_participantes(id:int, dado: Participante):
-    try:
-        ParticipantesService.editar_participante(id, dado)
-    except ValueError as e:
-        HTTPException(404, str(e))
+def atualizar_participantes(id: int, dado: Participante, service: ParticipantesService = Depends(get_participante_service)):
+    return service.editar_participante(id, dado)
 
-# Excluir participante: 
-# DELETE /participantes/{id} 
+
+# Excluir participante:
+# DELETE /participantes/{id}
+
 @router.delete("/{id}")
-def excluir_participantes(id:int):
-    try:
-        ParticipantesRepositorio.excluir(id)
-    except ValueError as e:
-        HTTPException(404, str(e))
+def excluir_participantes(id: int, service: ParticipantesService = Depends(get_participante_service)):
+    participante = service.participante_repository.excluir(id)
+    if participante is None:
+        raise HTTPException(status_code=404, detail="Participante não encontrado")
+    return {"mensagem": "Participante removido"}

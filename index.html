@@ -1,13 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gerenciamento de Eventos</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secretaria de Eventos Acadêmicos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+
+  <div class="masthead">
+    <div class="masthead__row">
+      <div class="masthead__mark">SEA</div>
+      <div class="masthead__title">
+        <h1>Secretaria de Eventos Acadêmicos</h1>
+        <p>Cadastro, inscrições e controle de vagas — semana acadêmica</p>
+      </div>
+      <div class="masthead__status" id="apiStatus">
+        <span class="dot" id="apiDot"></span>
+        <span id="apiStatusText">verificando conexão…</span>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab is-active" data-tab="eventos" role="tab" aria-selected="true">Eventos</button>
+      <button class="tab" data-tab="participantes" role="tab" aria-selected="false">Participantes</button>
+    </nav>
+  </div>
+
+  <main class="board">
+
+    <!-- ===================== EVENTOS ===================== -->
+    <section class="panel" id="panel-eventos" data-panel="eventos">
+
+      <div class="panel__list">
+        <div class="panel__list-head">
+          <h2>Eventos cadastrados</h2>
+          <button class="btn btn--primary" id="btnNovoEvento">+ Novo evento</button>
+        </div>
+
+        <div class="filterbar">
+          <input type="search" id="filtroEventos" placeholder="Buscar por título ou categoria…">
+        </div>
+
+        <ul class="cardlist" id="listaEventos">
+          <li class="empty-state">Carregando eventos…</li>
+        </ul>
+      </div>
+
+      <div class="panel__detail" id="detalheEvento">
+        <div class="empty-detail">
+          <p>Selecione um evento na lista para ver os detalhes,</p>
+          <p>ou cadastre um novo evento.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================== PARTICIPANTES ===================== -->
+    <section class="panel is-hidden" id="panel-participantes" data-panel="participantes">
+
+      <div class="panel__list">
+        <div class="panel__list-head">
+          <h2>Participantes cadastrados</h2>
+          <button class="btn btn--primary" id="btnNovoParticipante">+ Novo participante</button>
+        </div>
+
+        <div class="filterbar">
+          <input type="search" id="filtroParticipantes" placeholder="Buscar por nome, curso ou e-mail…">
+        </div>
+
+        <ul class="cardlist" id="listaParticipantes">
+          <li class="empty-state">Carregando participantes…</li>
+        </ul>
+      </div>
+
+      <div class="panel__detail" id="detalheParticipante">
+        <div class="empty-detail">
+          <p>Selecione um participante na lista para ver os detalhes,</p>
+          <p>ou cadastre um novo participante.</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ===================== MODAL: Evento (criar/editar) ===================== -->
+  <div class="modal-backdrop" id="modalEventoBackdrop">
+    <form class="modal" id="formEvento">
+      <div class="modal__head">
+        <h3 id="modalEventoTitulo">Novo evento</h3>
+        <button type="button" class="modal__close" data-close="modalEventoBackdrop">&times;</button>
+      </div>
+      <input type="hidden" id="eventoId">
+      <div class="field">
+        <label for="eventoTitulo">Título</label>
+        <input required id="eventoTitulo" maxlength="120" placeholder="Ex.: Semana de Engenharia de Software">
+      </div>
+      <div class="field">
+        <label for="eventoDescricao">Descrição</label>
+        <textarea required id="eventoDescricao" rows="3" placeholder="O que acontece nesse evento?"></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="eventoData">Data</label>
+          <input required type="date" id="eventoData">
+        </div>
+        <div class="field">
+          <label for="eventoHorario">Horário</label>
+          <input required type="time" id="eventoHorario">
+        </div>
+      </div>
+      <div class="field">
+        <label for="eventoLocal">Local</label>
+        <input required id="eventoLocal" placeholder="Ex.: Auditório Central, Bloco B">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="eventoCapacidade">Capacidade</label>
+          <input required type="number" min="1" id="eventoCapacidade" placeholder="Ex.: 80">
+        </div>
+        <div class="field">
+          <label for="eventoCategoria">Categoria</label>
+          <select required id="eventoCategoria">
+            <option value="" disabled selected>Selecione</option>
+            <option>Palestra</option>
+            <option>Workshop</option>
+            <option>Minicurso</option>
+            <option>Seminário</option>
+            <option>Competição</option>
+          </select>
+        </div>
+      </div>
+      <p class="form-error" id="eventoErro"></p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" data-close="modalEventoBackdrop">Cancelar</button>
+        <button type="submit" class="btn btn--primary" id="eventoSalvarBtn">Salvar evento</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ===================== MODAL: Participante (criar/editar) ===================== -->
+  <div class="modal-backdrop" id="modalParticipanteBackdrop">
+    <form class="modal" id="formParticipante">
+      <div class="modal__head">
+        <h3 id="modalParticipanteTitulo">Novo participante</h3>
+        <button type="button" class="modal__close" data-close="modalParticipanteBackdrop">&times;</button>
+      </div>
+      <input type="hidden" id="participanteId">
+      <div class="field">
+        <label for="participanteNome">Nome completo</label>
+        <input required id="participanteNome" placeholder="Ex.: Ana Beatriz Souza">
+      </div>
+      <div class="field">
+        <label for="participanteEmail">E-mail</label>
+        <input required type="email" id="participanteEmail" placeholder="ana.souza@escola.edu.br">
+      </div>
+      <div class="field">
+        <label for="participanteCurso">Curso</label>
+        <input required id="participanteCurso" placeholder="Ex.: Ciência da Computação">
+      </div>
+      <p class="form-error" id="participanteErro"></p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" data-close="modalParticipanteBackdrop">Cancelar</button>
+        <button type="submit" class="btn btn--primary" id="participanteSalvarBtn">Salvar participante</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ===================== Toast de notificação ===================== -->
+  <div class="toast" id="toast"></div>
+
+<script src="scripts.js"></script>
 </body>
-<script src="/scripts.js"></script>
 </html>

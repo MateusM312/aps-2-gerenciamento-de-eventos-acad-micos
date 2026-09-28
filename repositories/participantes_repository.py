@@ -1,4 +1,4 @@
-# REPOSITORIO CLIENTES
+# REPOSITORIO PARTICIPANTES
 
 class ParticipantesRepositorio:
     def __init__(self):
@@ -14,45 +14,40 @@ class ParticipantesRepositorio:
     def listar_participantes(self):
         return self.participantes
 
-    def buscar_por_id(self, id:int):
+    def buscar_por_id(self, id: int):
         for i in self.participantes:
             if i.id == id:
                 return i
+        return None
 
-    def excluir(self, id:int):
+    def excluir(self, id: int):
         participante = self.buscar_por_id(id)
         if participante is None:
             return None
         self.participantes.remove(participante)
+        return participante
 
-    def atualizar(self, dados, id:int):
+    def atualizar(self, id: int, dados):
         participante = self.buscar_por_id(id)
         if participante is None:
             return None
         participante.nome = dados.nome
         participante.email = dados.email
+        participante.curso = dados.curso
         return participante
 
-# Cadastrar participante: (CHECK) 
-# POST /participantes 
+
+# Cadastrar participante: (CHECK)
+# POST /participantes
 
 # Listar participantes: (CHECK)
-# GET /participantes 
+# GET /participantes
 
 # Consultar participante: (CHECK)
-# GET /participantes/{id} 
+# GET /participantes/{id}
 
 # Atualizar participante: (CHECK)
-# PUT /participantes/{id} 
+# PUT /participantes/{id}
 
 # Excluir participante: (CHECK)
-# DELETE /participantes/{id} 
-
-# MODEL PARTICIPANTE
-
-
-# class Participante(BaseModel):
-#     id: int | None = None
-#     nome: str
-#     email: str
-#     curso: str
+# DELETE /participantes/{id}
