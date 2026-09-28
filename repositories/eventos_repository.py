@@ -28,17 +28,17 @@ class EventoRepository:
         self.eventos.remove(evento)
         return evento
 
-    def atualizar(self, evento):
+    def atualizar(self, dados):
         evento = self.buscar_por_id(id)
         if evento is None:
             return None
-        evento.titulo = evento.titulo
-        evento.descricao = evento.descricao
-        evento.data = evento.data
-        evento.horario = evento.horario
-        evento.local = evento.local
-        evento.capacidade = evento.capacidade
-        evento.categoria = evento.categoria
+        evento.titulo = dados.titulo
+        evento.descricao = dados.descricao
+        evento.data = dados.data
+        evento.horario = dados.horario
+        evento.local = dados.local
+        evento.capacidade = dados.capacidade
+        evento.categoria = dados.categoria
         return evento
 
     def inscrever(self, evento_id:int, participante_id:int):
