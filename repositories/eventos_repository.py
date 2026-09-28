@@ -1,25 +1,5 @@
 #  EVENTOS REPOSITORY
 
-# class FilmeRepository:
-#     def __init__(self):
-#         self.filmes = []
-#         self._proximo_filme = 1
-
-#     def salvar(self, filme):
-#         filme.id = self._proximo_filme
-#         self._proximo_filme += 1
-#         self.filmes.append(filme)
-#         return filme
-
-#     def listar(self):
-#         return self.filmes
-
-#     def buscar_por_id(self, id_filme:int):
-#         for filme in self.filmes:
-#             if filme.id == id_filme:
-#                 return filme
-#         return None
-
 class EventoRepository:
     def __init__(self):
         self.eventos = []
@@ -66,7 +46,6 @@ class EventoRepository:
 
     def listar_inscritos(self, evento_id: int):
         return self.inscricoes.get(evento_id, [])
-    # def consultar(self, )
 
 # Cadastrar evento (CHECK)
 # POST /eventos 
