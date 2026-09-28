@@ -34,6 +34,34 @@ class EventoRepository:
     def listar(self):
         return self.eventos
 
+    def buscar_por_id(self, id:int):
+        for i in self.eventos:
+            if i.id == id:
+                return i
+        return None
+
+    def remover(self, id: int):
+        evento = self.buscar_por_id(id)
+        if evento is None:
+            return None
+        self.eventos.remove(evento)
+        return evento
+
+    def atualizar(self, evento):
+        evento = self.buscar_por_id(id)
+        if evento is None:
+            return None
+        evento.titulo = evento.titulo
+        evento.descricao = evento.descricao
+        evento.data = evento.data
+        evento.horario = evento.horario
+        evento.local = evento.local
+        evento.capacidade = evento.capacidade
+        evento.categoria = evento.categoria
+        return evento
+
+    # def consultar(self, )
+
 # Cadastrar evento (CHECK)
 # POST /eventos 
 # Deverá receber os dados do evento em formato JSON e retornar o evento cadastrado. 
