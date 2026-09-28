@@ -1,4 +1,4 @@
-# segundo a fazer
+#  EVENTOS REPOSITORY
 
 # class FilmeRepository:
 #     def __init__(self):
@@ -24,6 +24,7 @@ class EventoRepository:
     def __init__(self):
         self.eventos = []
         self._proximo_evento = 1
+        self.inscricoes = {}
 
     def salvar(self, evento):
         evento.id = self._proximo_evento
@@ -60,6 +61,11 @@ class EventoRepository:
         evento.categoria = evento.categoria
         return evento
 
+    def inscrever(self, evento_id:int, participante_id:int):
+        self.inscricoes.setdefault(evento_id, []).append(participante_id)
+
+    def listar_inscritos(self, evento_id: int):
+        return self.inscricoes.get(evento_id, [])
     # def consultar(self, )
 
 # Cadastrar evento (CHECK)
