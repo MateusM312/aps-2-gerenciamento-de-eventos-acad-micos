@@ -18,6 +18,7 @@ class ParticipantesRepositorio:
         for i in self.participantes:
             if i.id == id:
                 return i
+
         return None
 
     def excluir(self, id: int):
