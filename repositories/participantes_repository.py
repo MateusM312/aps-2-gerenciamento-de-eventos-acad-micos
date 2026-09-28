@@ -42,10 +42,10 @@ class ParticipantesRepositorio:
 # Consultar participante: (CHECK)
 # GET /participantes/{id} 
 
-# Atualizar participante: 
+# Atualizar participante: (CHECK)
 # PUT /participantes/{id} 
 
-# Excluir participante: 
+# Excluir participante: (CHECK)
 # DELETE /participantes/{id} 
 
 # MODEL PARTICIPANTE

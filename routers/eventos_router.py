@@ -67,3 +67,21 @@ def excluir_evento(id:int):
         repository.remover(id)
     except ValueError as e:
         HTTPException(404, str(e))
+
+
+#Inscrever participante:
+@router.post("/{evento_id}/inscricoes/{participante_id}")
+def inscrever_participante(evento_id:int, participante_id:int, service: EventoService = Depends(get_evento_service)):
+    try:
+        service.inscrever(evento_id, participante_id)
+    except ValueError as e:
+        HTTPException(404, str(e))
+
+# Listar participantes de certo evento
+
+@router.get("/participantes/{evento_id}")
+def listar_participantes(evento_id:int, services: EventoService = Depends(get_evento_service)):
+    try:
+        service.listar_inscritos(evento_id)
+    except ValueError as e:
+        HTTPException(404, str(e))
